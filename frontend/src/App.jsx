@@ -177,6 +177,7 @@ function App() {
             profile={profile}
             loading={loading}
             onUpload={handleCVUpload}
+            onUpdate={updateProfile}
           />
         )}
 
@@ -220,7 +221,32 @@ function TabButton({ active, onClick, icon, label, disabled }) {
   );
 }
 
-function UploadTab({ profile, loading, onUpload }) {
+function UploadTab({ profile, loading, onUpload, onUpdate }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState({});
+
+  const handleEditClick = () => {
+    setEditForm({
+      name: profile.name || '',
+      email: profile.email || '',
+      phone: profile.phone || '',
+      skills: profile.skills ? profile.skills.join(', ') : '',
+      desired_roles: profile.desired_roles ? profile.desired_roles.join(', ') : ''
+    });
+    setIsEditing(true);
+  };
+
+  const handleSaveClick = () => {
+    onUpdate({
+      name: editForm.name,
+      email: editForm.email,
+      phone: editForm.phone,
+      skills: editForm.skills.split(',').map(s => s.trim()).filter(Boolean),
+      desired_roles: editForm.desired_roles.split(',').map(s => s.trim()).filter(Boolean)
+    });
+    setIsEditing(false);
+  };
+
   return (
     <div className="max-w-2xl mx-auto">
       <div className="bg-white rounded-lg shadow p-8">
@@ -234,17 +260,96 @@ function UploadTab({ profile, loading, onUpload }) {
               Tu perfil está listo. Ve a la pestaña "Ofertas" para ver los matches.
             </p>
             
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h3 className="font-semibold mb-2">Tu perfil:</h3>
-              <ul className="space-y-1 text-sm">
-                {profile.name && <li><strong>Nombre:</strong> {profile.name}</li>}
-                {profile.skills && (
-                  <li><strong>Skills:</strong> {profile.skills.join(', ')}</li>
-                )}
-                {profile.desired_roles && (
-                  <li><strong>Roles:</strong> {profile.desired_roles.join(', ')}</li>
-                )}
-              </ul>
+            <div className="bg-blue-50 p-6 rounded-lg border border-blue-100 relative">
+              {!isEditing ? (
+                <>
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="font-semibold text-lg text-blue-900">Datos Extraídos:</h3>
+                    <button 
+                      onClick={handleEditClick}
+                      className="px-3 py-1 bg-blue-100 text-blue-700 rounded-md text-sm font-medium hover:bg-blue-200 transition"
+                    >
+                      Editar
+                    </button>
+                  </div>
+                  <ul className="space-y-2 text-sm text-gray-700">
+                    {profile.name && <li><strong className="text-gray-900">Nombre:</strong> {profile.name}</li>}
+                    {profile.email && <li><strong className="text-gray-900">Email:</strong> {profile.email}</li>}
+                    {profile.phone && <li><strong className="text-gray-900">Teléfono:</strong> {profile.phone}</li>}
+                    {profile.skills && (
+                      <li><strong className="text-gray-900">Skills:</strong> {profile.skills.join(', ')}</li>
+                    )}
+                    {profile.desired_roles && (
+                      <li><strong className="text-gray-900">Roles:</strong> {profile.desired_roles.join(', ')}</li>
+                    )}
+                  </ul>
+                </>
+              ) : (
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center mb-2">
+                    <h3 className="font-semibold text-lg text-blue-900">Editar Perfil:</h3>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Nombre</label>
+                    <input 
+                      type="text" 
+                      value={editForm.name} 
+                      onChange={e => setEditForm({...editForm, name: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Email</label>
+                    <input 
+                      type="email" 
+                      value={editForm.email} 
+                      onChange={e => setEditForm({...editForm, email: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Teléfono</label>
+                    <input 
+                      type="text" 
+                      value={editForm.phone} 
+                      onChange={e => setEditForm({...editForm, phone: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Skills (separados por coma)</label>
+                    <textarea 
+                      value={editForm.skills} 
+                      onChange={e => setEditForm({...editForm, skills: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+                      rows={2}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600 mb-1">Roles (separados por coma)</label>
+                    <input 
+                      type="text" 
+                      value={editForm.desired_roles} 
+                      onChange={e => setEditForm({...editForm, desired_roles: e.target.value})}
+                      className="w-full px-3 py-2 border rounded-md text-sm focus:ring-blue-500 focus:border-blue-500"
+                    />
+                  </div>
+                  <div className="flex space-x-2 pt-2">
+                    <button 
+                      onClick={handleSaveClick}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition"
+                    >
+                      Guardar Cambios
+                    </button>
+                    <button 
+                      onClick={() => setIsEditing(false)}
+                      className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md text-sm font-medium hover:bg-gray-300 transition"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <button
@@ -254,7 +359,7 @@ function UploadTab({ profile, loading, onUpload }) {
                   window.location.reload();
                 }
               }}
-              className="text-blue-600 hover:text-blue-800 text-sm"
+              className="text-blue-600 hover:text-blue-800 text-sm mt-4 inline-block"
             >
               Subir nuevo CV →
             </button>
