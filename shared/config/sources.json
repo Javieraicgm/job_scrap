@@ -1,0 +1,79 @@
+{
+  "sources": [
+    {
+      "id": "empleos_publicos",
+      "name": "Empleos Públicos Chile",
+      "url": "https://www.empleospublicos.cl",
+      "type": "scraper",
+      "active": true,
+      "categories": ["data_science", "ti", "analisis"],
+      "scraper_file": "empleos_publicos.py",
+      "description": "Portal oficial de empleos del Estado chileno"
+    },
+    {
+      "id": "getonboard",
+      "name": "GetOnBoard",
+      "url": "https://www.getonbrd.com/jobs",
+      "type": "scraper",
+      "active": true,
+      "categories": ["tech", "data_science", "startup"],
+      "scraper_file": "getonboard.py",
+      "description": "Plataforma de empleos tech en LATAM"
+    },
+    {
+      "id": "trabajando",
+      "name": "Trabajando.com Chile",
+      "url": "https://www.trabajando.cl",
+      "type": "scraper",
+      "active": true,
+      "categories": ["general", "data_science"],
+      "scraper_file": "trabajando.py",
+      "description": "Portal de empleos general en Chile"
+    },
+    {
+      "id": "linkedin",
+      "name": "LinkedIn Jobs Chile",
+      "url": "https://www.linkedin.com/jobs/search",
+      "type": "scraper",
+      "active": true,
+      "categories": ["professional", "data_science"],
+      "scraper_file": "linkedin.py",
+      "description": "Ofertas profesionales en LinkedIn"
+    },
+    {
+      "id": "mercado_publico",
+      "name": "Mercado Público (Licitaciones)",
+      "url": "https://www.mercadopublico.cl",
+      "type": "scraper",
+      "active": true,
+      "categories": ["consulting", "data_analysis"],
+      "scraper_file": "mercado_publico.py",
+      "description": "Licitaciones públicas que requieren análisis de datos"
+    },
+    {
+      "id": "codelco",
+      "name": "Codelco Carreras",
+      "url": "https://www.codelco.com/trabaja-con-nosotros",
+      "type": "scraper",
+      "active": true,
+      "categories": ["mining", "data_science"],
+      "scraper_file": "codelco.py",
+      "description": "Ofertas laborales en Codelco"
+    },
+    {
+      "id": "buk",
+      "name": "Buk Empleos",
+      "url": "https://www.buk.cl/empleos",
+      "type": "scraper",
+      "active": false,
+      "categories": ["tech", "startup"],
+      "scraper_file": "buk.py",
+      "description": "Portal de empleos corporativos"
+    }
+  ],
+  "metadata": {
+    "last_updated": "2025-05-21",
+    "total_sources": 7,
+    "active_sources": 6
+  }
+}

@@ -1,0 +1,65 @@
+name: Run Job Scrapers
+
+on:
+  schedule:
+    # Ejecutar cada 6 horas: 00:00, 06:00, 12:00, 18:00 UTC (Chile UTC-3)
+    - cron: '0 */6 * * *'
+  
+  # Permitir ejecución manual
+  workflow_dispatch:
+
+jobs:
+  scrape-jobs:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+      
+      - name: Load sources configuration
+        run: |
+          cat shared/config/sources.json
+      
+      - name: Run scrapers
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          cd backend
+          python -m scrapers.run_all_scrapers
+      
+      - name: Calculate matches
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          cd backend
+          python -m matcher.calculate_all_matches
+      
+      - name: Send notifications (if Monday 8 AM Chile time)
+        if: github.event.schedule == '0 11 * * 1'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          cd backend
+          python -m email.send_weekly_reports
+      
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: scraper-logs
+          path: backend/logs/*.log
+          retention-days: 7
