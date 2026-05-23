@@ -2,16 +2,16 @@
 
 Sistema automatizado que encuentra ofertas laborales relevantes para perfiles de Data Science en Chile.
 
-## 🎯 Características
+## Características
 
-- ✅ **Sin login**: Acceso directo con link compartido
-- ✅ **Parser automático de CV**: Sube tu CV y extrae tu perfil
-- ✅ **Matching inteligente**: Score de compatibilidad 0-100
-- ✅ **Fuentes configurables**: Agrega/edita fuentes fácilmente
-- ✅ **Reportes semanales**: Email automático cada lunes
-- ✅ **100% gratuito**: Hasta 1000 usuarios activos
+- **Sin login**: Acceso directo con link compartido
+- **Parser automático de CV**: Sube tu CV y extrae tu perfil
+- **Matching inteligente**: Score de compatibilidad 0-100
+- **Fuentes configurables**: Agrega/edita fuentes fácilmente
+- **Reportes semanales**: Email automático cada lunes
+- **100% gratuito**: Hasta 1000 usuarios activos
 
-## 🏗️ Arquitectura
+## Arquitectura
 
 ```
 Frontend (React + Vite)
@@ -23,7 +23,7 @@ Supabase (PostgreSQL)
 GitHub Actions (Scrapers cada 6h)
 ```
 
-## 📋 Prerequisitos
+## Prerequisitos
 
 ### Para desarrollo:
 - Node.js 18+
@@ -36,7 +36,7 @@ GitHub Actions (Scrapers cada 6h)
 3. **Supabase** (base de datos)
 4. **Resend** (emails)
 
-## 🚀 Setup Paso a Paso
+## Setup Paso a Paso
 
 ### 1. Clonar repositorio
 
@@ -104,7 +104,7 @@ python -m scrapers.empleos_publicos
    - `RESEND_API_KEY`
 3. Los scrapers se ejecutarán automáticamente cada 6 horas
 
-## 📝 Agregar Nueva Fuente de Empleos
+## Agregar Nueva Fuente de Empleos
 
 ### 1. Editar configuración
 
@@ -167,7 +167,7 @@ git push
 
 Los scrapers se actualizarán automáticamente.
 
-## 🎨 Personalización
+## Personalización
 
 ### Modificar criterios de matching
 
@@ -191,7 +191,7 @@ schedule:
   - cron: '0 */6 * * *'  # Cambiar frecuencia
 ```
 
-## 📊 Monitoreo
+## Monitoreo
 
 ### Ver logs de scrapers
 
@@ -215,7 +215,7 @@ ORDER BY match_score DESC
 LIMIT 10;
 ```
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Scraper falla
 
@@ -238,7 +238,7 @@ LIMIT 10;
 2. Revisar logs de deployment
 3. Probar localmente: `npm run dev`
 
-## 📈 Escalamiento
+## Escalamiento
 
 ### Si crece a >1000 usuarios:
 
@@ -248,7 +248,7 @@ LIMIT 10;
 
 **Total: ~$65/mes** para miles de usuarios
 
-## 🤝 Contribuir
+## Contribuir
 
 Para agregar features o reportar bugs:
 
@@ -258,11 +258,11 @@ Para agregar features o reportar bugs:
 4. Push: `git push origin feature/nueva-feature`
 5. Crear Pull Request
 
-## 📄 Licencia
+## Licencia
 
 MIT License - úsalo libremente
 
-## 💬 Soporte
+## Soporte
 
 Para dudas o problemas:
 - Crear Issue en GitHub
@@ -270,4 +270,4 @@ Para dudas o problemas:
 
 ---
 
-**¡Listo para encontrar tu próximo trabajo en Data Science! 🚀**
+**¡Listo para encontrar tu próximo trabajo en Data Science!**
