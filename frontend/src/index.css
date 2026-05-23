@@ -1,15 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Outfit', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #121212; /* Dark theme default */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -21,4 +23,32 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  /* Premium dark background gradient */
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  background-attachment: fixed;
+}
+
+/* Glassmorphism utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s ease;
+}
+
+.glass-panel-hover:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  transform: translateY(-4px);
+}
+
+/* Custom Wine Accent Text Shadow for Titles */
+.wine-glow {
+  text-shadow: 0 0 20px rgba(153, 27, 43, 0.4);
 }
