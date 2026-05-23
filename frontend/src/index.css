@@ -23,8 +23,8 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  /* Premium dark background gradient */
-  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  /* Premium dark background gradient (Neutral Grays) */
+  background: linear-gradient(135deg, #111111 0%, #1a1a1a 50%, #0a0a0a 100%);
   background-attachment: fixed;
 }
 
