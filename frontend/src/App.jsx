@@ -217,6 +217,8 @@ function App() {
       </main>
     </div>
   );
+}
+
 // Componentes auxiliares
 
 function TabButton({ active, onClick, icon, label, disabled }) {
