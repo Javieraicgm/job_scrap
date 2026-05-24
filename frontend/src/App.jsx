@@ -535,8 +535,11 @@ function JobsTab({ jobs, profile, onRefresh }) {
             Ofertas Recomendadas
           </h2>
           <p className="text-gray-400">
-            Encontramos {jobs.length} oportunidades reales compatibles contigo. 
-            {jobs.length > 10 && <span className="block mt-1 text-rose-300/80">Mostrando las 10 mejores. El listado completo fue enviado a tu correo.</span>}
+            Encontramos {jobs.length} oportunidades reales compatibles contigo.
+            <span className="block mt-1 text-rose-300/80">
+              {jobs.length > 10 ? 'Mostrando las 10 mejores. ' : ''}
+              El informe detallado fue enviado a tu correo.
+            </span>
           </p>
         </div>
         
