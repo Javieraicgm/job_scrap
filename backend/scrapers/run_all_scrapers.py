@@ -17,7 +17,7 @@ from .computrabajo import ComputrabajoScraper
 from .trabajando import TrabajandoScraper
 from .codelco import CodelcoScraper
 from .linkedin import LinkedInScraper
-# from .linkedin import LinkedInScraper
+from .bhp import BhpScraper
 
 load_dotenv()
 
@@ -52,6 +52,7 @@ class ScraperRunner:
             'trabajando': TrabajandoScraper,
             'codelco': CodelcoScraper,
             'linkedin': LinkedInScraper,
+            'bhp': BhpScraper,
         }
         
         total_new_jobs = 0

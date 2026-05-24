@@ -5,14 +5,14 @@ import datetime
 from .base_scraper import BaseScraper
 import re
 
-class CodelcoScraper(BaseScraper):
-    """Scraper web para Codelco (SuccessFactors)"""
+class BhpScraper(BaseScraper):
+    """Scraper web para BHP (SuccessFactors)"""
     
     def __init__(self):
         super().__init__(
-            source_id='codelco',
-            source_name='Codelco Carreras',
-            base_url='https://empleos.codelco.cl'
+            source_id='bhp',
+            source_name='BHP Careers',
+            base_url='https://careers.bhp.com'
         )
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
@@ -25,7 +25,7 @@ class CodelcoScraper(BaseScraper):
         all_jobs = []
         
         for keyword in keywords:
-            print(f"   Buscando '{keyword}' en Codelco...")
+            print(f"   Buscando '{keyword}' en BHP...")
             try:
                 kw_formatted = keyword.replace(' ', '+')
                 url = f"{self.base_url}/search/?q={kw_formatted}"
@@ -60,7 +60,7 @@ class CodelcoScraper(BaseScraper):
                 self.rate_limit(2.0)
                 
             except Exception as e:
-                print(f"   Error consultando Codelco para '{keyword}': {e}")
+                print(f"   Error consultando BHP para '{keyword}': {e}")
                 
         unique_jobs = {job['url']: job for job in all_jobs}.values()
         return list(unique_jobs)
@@ -87,10 +87,10 @@ class CodelcoScraper(BaseScraper):
                 location = location_elem.get_text(strip=True)
             
             # A veces el departamento está en otro span
-            department = "Codelco"
+            department = "BHP"
             dept_elem = article.find('span', class_=re.compile(r'department|facility', re.IGNORECASE))
             if dept_elem:
-                department = f"Codelco - {dept_elem.get_text(strip=True)}"
+                department = f"BHP - {dept_elem.get_text(strip=True)}"
                 
             raw_data = {
                 'external_id': external_id,
@@ -119,5 +119,5 @@ class CodelcoScraper(BaseScraper):
             return self.normalize_job(raw_data)
             
         except Exception as e:
-            print(f"   Error parseando artículo de Codelco: {e}")
+            print(f"   Error parseando artículo de BHP: {e}")
             return None
