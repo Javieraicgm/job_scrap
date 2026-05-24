@@ -74,7 +74,7 @@ class EmailSender:
                     '*, jobs(*)'
                 ).eq('profile_id', user['id']).gte(
                     'match_score', user.get('alert_threshold', 70)
-                ).order('match_score', desc=True).limit(20).execute()
+                ).order('match_score', desc=True).limit(200).execute()
                 
                 if not matches_data.data:
                     print(f"   ℹ️  Sin ofertas para este usuario")

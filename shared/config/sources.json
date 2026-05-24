@@ -75,7 +75,7 @@
       "name": "BHP Careers Chile",
       "url": "https://careers.bhp.com/search?location=chile",
       "type": "scraper",
-      "active": false,
+      "active": true,
       "categories": ["mining", "data_science"],
       "scraper_file": "bhp.py",
       "description": "Ofertas laborales en minería (BHP)"

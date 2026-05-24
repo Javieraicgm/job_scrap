@@ -54,7 +54,7 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: |
           cd backend
-          python -m email.send_weekly_reports
+          python -m mail_sender.send_weekly_reports
       
       - name: Upload logs
         if: always()

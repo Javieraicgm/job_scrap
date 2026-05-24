@@ -107,7 +107,7 @@ function App() {
       .select('*, jobs(*)')
       .eq('profile_id', profileId)
       .order('match_score', { ascending: false })
-      .limit(20);
+      .limit(200);
 
     if (!error) {
       setJobs(data);
