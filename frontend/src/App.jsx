@@ -465,7 +465,7 @@ function JobsTab({ jobs, profile, onRefresh }) {
         throw new Error(data.detail || 'Error al ejecutar la búsqueda');
       }
       
-      setScrapeResult({ success: true, newJobs: data.new_jobs });
+      setScrapeResult({ success: true, newJobs: data.new_jobs, matchesUpdated: data.matches_updated });
       if (onRefresh) onRefresh();
       
       // Ocultar mensaje de éxito después de 8 segundos
@@ -513,7 +513,7 @@ function JobsTab({ jobs, profile, onRefresh }) {
         {scrapeResult && scrapeResult.success && (
           <div className="mt-6 inline-flex items-center space-x-2 px-4 py-2 bg-green-900/30 text-green-400 rounded-lg border border-green-500/30">
             <CheckCircle2 size={18} />
-            <span>¡Búsqueda completada! Se encontraron {scrapeResult.newJobs} ofertas nuevas.</span>
+            <span>¡Búsqueda completada! Analizamos {scrapeResult.newJobs} ofertas nuevas en el mercado y encontramos <strong>{scrapeResult.matchesUpdated} compatibles</strong> que fueron enviadas a tu correo.</span>
           </div>
         )}
         {scrapeResult && !scrapeResult.success && (
@@ -535,7 +535,8 @@ function JobsTab({ jobs, profile, onRefresh }) {
             Ofertas Recomendadas
           </h2>
           <p className="text-gray-400">
-            Encontramos {jobs.length} oportunidades alineadas a tu perfil
+            Encontramos {jobs.length} oportunidades reales compatibles contigo. 
+            {jobs.length > 10 && <span className="block mt-1 text-rose-300/80">Mostrando las 10 mejores. El listado completo fue enviado a tu correo.</span>}
           </p>
         </div>
         
@@ -575,7 +576,7 @@ function JobsTab({ jobs, profile, onRefresh }) {
       </div>
 
       <div className="grid gap-6">
-        {jobs.map((match) => {
+        {jobs.slice(0, 10).map((match) => {
           const job = match.jobs;
           const score = match.match_score;
 
