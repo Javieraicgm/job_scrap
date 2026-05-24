@@ -5,6 +5,7 @@ Ejecuta todos los scrapers activos y guarda resultados en Supabase
 
 import os
 import json
+import concurrent.futures
 from datetime import datetime
 from typing import List, Dict
 from supabase import create_client, Client
@@ -27,7 +28,7 @@ class ScraperRunner:
     
     def __init__(self):
         supabase_url = os.getenv('SUPABASE_URL')
-        supabase_key = os.getenv('SUPABASE_KEY')
+        supabase_key = os.getenv('SUPABASE_SERVICE_ROLE_KEY', os.getenv('SUPABASE_KEY'))
         
         if not supabase_url or not supabase_key:
             raise ValueError("SUPABASE_URL y SUPABASE_KEY deben estar configurados")
@@ -57,41 +58,41 @@ class ScraperRunner:
         
         total_new_jobs = 0
         
-        for source in self.sources:
-            if not source['active']:
-                print(f"⏭️  Saltando {source['name']} (inactivo)")
-                continue
-            
+        active_sources = [s for s in self.sources if s['active'] and s['id'] in scraper_classes]
+        
+        def run_single_scraper(source):
             source_id = source['id']
-            
-            if source_id not in scraper_classes:
-                print(f"⚠️  Scraper para {source['name']} no implementado aún")
-                continue
-            
             print(f"\n🔍 Ejecutando scraper: {source['name']}")
-            
-            # Registrar inicio
-            run_id = self._log_scraper_start(source_id)
-            
+            run_id = None
             try:
-                # Ejecutar scraper
+                run_id = self._log_scraper_start(source_id)
+            except Exception as e:
+                print(f"No se pudo registrar log de inicio (ignorando): {e}")
+
+            try:
                 scraper = scraper_classes[source_id]()
+                # Limitar búsqueda express a 1 keyword por rapidez si es posible, o usar todas. 
+                # El método scrape original decide
                 jobs = scraper.scrape()
+                print(f"   Encontradas {len(jobs)} ofertas en {source['name']}")
                 
-                print(f"   Encontradas {len(jobs)} ofertas")
-                
-                # Guardar en DB
                 new_jobs = self._save_jobs(jobs)
-                total_new_jobs += new_jobs
+                print(f"   ✅ {new_jobs} ofertas nuevas guardadas en {source['name']}")
                 
-                print(f"   ✅ {new_jobs} ofertas nuevas guardadas")
-                
-                # Registrar éxito
-                self._log_scraper_success(run_id, len(jobs), new_jobs)
+                if run_id:
+                    self._log_scraper_success(run_id, len(jobs), new_jobs)
+                return new_jobs
                 
             except Exception as e:
-                print(f"   ❌ Error: {e}")
-                self._log_scraper_error(run_id, str(e))
+                print(f"   ❌ Error en {source['name']}: {e}")
+                if run_id:
+                    self._log_scraper_error(run_id, str(e))
+                return 0
+
+        # Ejecutar en paralelo para evitar timeout en Vercel (10s limit)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+            results = executor.map(run_single_scraper, active_sources)
+            total_new_jobs = sum(results)
         
         print(f"\n🎉 Total ofertas nuevas: {total_new_jobs}")
         return total_new_jobs
