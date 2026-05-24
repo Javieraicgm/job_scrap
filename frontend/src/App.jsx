@@ -3,8 +3,9 @@ import { createClient } from '@supabase/supabase-js';
 import { 
   Upload, Briefcase, Settings, Mail, 
   CheckCircle2, FileText, MapPin, DollarSign, 
-  ExternalLink, Edit2, Save, X, Search, Check
+  ExternalLink, Edit2, Save, X, Search, Check, Info
 } from 'lucide-react';
+import AboutSection from './components/AboutSection';
 
 // Inicializar Supabase
 const supabase = createClient(
@@ -177,6 +178,13 @@ function App() {
             label="Ajustes"
             disabled={!profile}
           />
+          <button 
+            className={`flex items-center space-x-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${activeTab === 'about' ? 'bg-rose-900/80 text-rose-100 shadow-lg border border-rose-500/30' : 'text-gray-400 hover:text-gray-200 hover:bg-white/5 border border-transparent'}`}
+            onClick={() => setActiveTab('about')}
+          >
+            <Info size={18} />
+            <span>Soporte</span>
+          </button>
         </div>
       </nav>
 
@@ -204,11 +212,11 @@ function App() {
             onUpdate={updateProfile}
           />
         )}
+
+        {activeTab === 'about' && <AboutSection />}
       </main>
     </div>
   );
-}
-
 // Componentes auxiliares
 
 function TabButton({ active, onClick, icon, label, disabled }) {
