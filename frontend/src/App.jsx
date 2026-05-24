@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { 
   Upload, Briefcase, Settings, Mail, 
   CheckCircle2, FileText, MapPin, DollarSign, 
-  ExternalLink, Edit2, Save, X, Search, Check, Info
+  ExternalLink, Edit2, Save, X, Search, Check, Info, AlertCircle
 } from 'lucide-react';
 import AboutSection from './components/AboutSection';
 
