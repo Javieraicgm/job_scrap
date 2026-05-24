@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 # Importar scrapers
 from .empleos_publicos import EmpleosPublicosScraper
 from .getonboard import GetOnBoardScraper
+from .computrabajo import ComputrabajoScraper
 # Importar otros scrapers cuando estén listos
 # from .linkedin import LinkedInScraper
 
@@ -43,6 +44,7 @@ class ScraperRunner:
         scraper_classes = {
             'empleos_publicos': EmpleosPublicosScraper,
             'getonboard': GetOnBoardScraper,
+            'computrabajo': ComputrabajoScraper,
             # 'linkedin': LinkedInScraper,
         }
         

@@ -175,7 +175,7 @@
       "name": "Computrabajo Chile",
       "url": "https://cl.computrabajo.com/",
       "type": "scraper",
-      "active": false,
+      "active": true,
       "categories": ["general"],
       "scraper_file": "computrabajo.py",
       "description": "Portal general de empleos"
