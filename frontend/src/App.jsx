@@ -203,6 +203,7 @@ function App() {
           <JobsTab
             jobs={jobs}
             profile={profile}
+            onRefresh={() => loadJobs(profile.id)}
           />
         )}
 
@@ -443,7 +444,38 @@ function UploadTab({ profile, loading, onUpload, onUpdate }) {
   );
 }
 
-function JobsTab({ jobs, profile }) {
+function JobsTab({ jobs, profile, onRefresh }) {
+  const [isScraping, setIsScraping] = useState(false);
+  const [scrapeResult, setScrapeResult] = useState(null);
+
+  const handleExpressSearch = async () => {
+    setIsScraping(true);
+    setScrapeResult(null);
+    try {
+      const response = await fetch('/api/scrape-now', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profileId: profile.id })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.detail || 'Error al ejecutar la búsqueda');
+      }
+      
+      setScrapeResult({ success: true, newJobs: data.new_jobs });
+      if (onRefresh) onRefresh();
+      
+      // Ocultar mensaje de éxito después de 8 segundos
+      setTimeout(() => setScrapeResult(null), 8000);
+    } catch (error) {
+      console.error('Error in express search:', error);
+      setScrapeResult({ success: false, error: error.message });
+    } finally {
+      setIsScraping(false);
+    }
+  };
   if (!jobs || jobs.length === 0) {
     return (
       <div className="glass-panel max-w-3xl mx-auto text-center py-20 rounded-3xl">
@@ -451,16 +483,52 @@ function JobsTab({ jobs, profile }) {
           <Briefcase className="h-10 w-10 text-gray-500" />
         </div>
         <h3 className="text-2xl font-bold text-white mb-3">No hay ofertas disponibles</h3>
-        <p className="text-gray-400 max-w-md mx-auto">
-          El sistema está analizando el mercado. Nuestros recolectores actualizan la base de datos cada 6 horas. Vuelve pronto.
+        <p className="text-gray-400 max-w-md mx-auto mb-8">
+          El sistema está analizando el mercado. Nuestros recolectores actualizan la base de datos cada 6 horas.
         </p>
+
+        <button
+          onClick={handleExpressSearch}
+          disabled={isScraping}
+          className={`mx-auto flex items-center space-x-2 px-6 py-3 rounded-full font-medium transition ${
+            isScraping 
+              ? 'bg-rose-900/40 text-rose-300 cursor-wait border border-rose-500/30' 
+              : 'bg-gradient-to-r from-rose-500 to-rose-700 hover:from-rose-400 hover:to-rose-600 text-white shadow-lg shadow-rose-900/50'
+          }`}
+        >
+          {isScraping ? (
+            <>
+              <div className="w-5 h-5 border-2 border-rose-300 border-t-transparent rounded-full animate-spin"></div>
+              <span>Buscando en la web (puede tardar 60s)...</span>
+            </>
+          ) : (
+            <>
+              <Search size={18} />
+              <span>Búsqueda Express Ahora</span>
+            </>
+          )}
+        </button>
+        
+        {scrapeResult && scrapeResult.success && (
+          <div className="mt-6 inline-flex items-center space-x-2 px-4 py-2 bg-green-900/30 text-green-400 rounded-lg border border-green-500/30">
+            <CheckCircle2 size={18} />
+            <span>¡Búsqueda completada! Se encontraron {scrapeResult.newJobs} ofertas nuevas.</span>
+          </div>
+        )}
+        {scrapeResult && !scrapeResult.success && (
+          <div className="mt-6 inline-flex items-center space-x-2 px-4 py-2 bg-red-900/30 text-red-400 rounded-lg border border-red-500/30">
+            <AlertCircle size={18} />
+            <span>Error: {scrapeResult.error}</span>
+          </div>
+        )}
+
       </div>
     );
   }
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
-      <div className="flex justify-between items-end mb-8 border-b border-white/10 pb-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 border-b border-white/10 pb-6 gap-4">
         <div>
           <h2 className="text-3xl font-bold text-white wine-glow mb-2">
             Ofertas Recomendadas
@@ -468,6 +536,40 @@ function JobsTab({ jobs, profile }) {
           <p className="text-gray-400">
             Encontramos {jobs.length} oportunidades alineadas a tu perfil
           </p>
+        </div>
+        
+        <div className="flex flex-col items-end">
+          <button
+            onClick={handleExpressSearch}
+            disabled={isScraping}
+            className={`flex items-center space-x-2 px-5 py-2.5 rounded-xl font-medium transition ${
+              isScraping 
+                ? 'bg-rose-900/40 text-rose-300 cursor-wait border border-rose-500/30' 
+                : 'bg-black/40 hover:bg-rose-900/40 text-rose-100 border border-white/10 hover:border-rose-500/50 shadow-lg'
+            }`}
+          >
+            {isScraping ? (
+              <>
+                <div className="w-4 h-4 border-2 border-rose-300 border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-sm">Buscando...</span>
+              </>
+            ) : (
+              <>
+                <Search size={16} />
+                <span className="text-sm">Búsqueda Express</span>
+              </>
+            )}
+          </button>
+          
+          {scrapeResult && scrapeResult.success && (
+            <span className="text-xs text-green-400 mt-2 flex items-center">
+              <CheckCircle2 size={12} className="mr-1" />
+              +{scrapeResult.newJobs} nuevas
+            </span>
+          )}
+          {scrapeResult && !scrapeResult.success && (
+            <span className="text-xs text-red-400 mt-2">Error al buscar</span>
+          )}
         </div>
       </div>
 

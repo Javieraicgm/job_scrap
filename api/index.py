@@ -13,6 +13,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from backend.api.cv_parser import CVParser
 from backend.matcher.calculate_all_matches import MatchCalculator
+from backend.scrapers.run_all_scrapers import ScraperRunner
 
 app = FastAPI()
 
@@ -21,6 +22,9 @@ class ParseCVRequest(BaseModel):
 
 class CalculateMatchesRequest(BaseModel):
     profileId: str
+
+class ScrapeNowRequest(BaseModel):
+    profileId: Optional[str] = None
 
 class ReportBugRequest(BaseModel):
     type: str
@@ -61,6 +65,22 @@ async def calculate_matches(request: CalculateMatchesRequest):
         matches_found = calculator.calculate_for_profile(request.profileId)
         return {"success": True, "matches_found": matches_found}
     except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/scrape-now")
+async def scrape_now(request: ScrapeNowRequest):
+    try:
+        runner = ScraperRunner()
+        new_jobs = runner.run_all()
+        
+        matches_found = 0
+        if request.profileId:
+            calculator = MatchCalculator()
+            matches_found = calculator.calculate_for_profile(request.profileId)
+            
+        return {"success": True, "new_jobs": new_jobs, "matches_updated": matches_found}
+    except Exception as e:
+        print(f"Error scrape_now: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/report-bug")

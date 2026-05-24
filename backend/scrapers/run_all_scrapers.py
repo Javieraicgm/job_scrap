@@ -32,8 +32,10 @@ class ScraperRunner:
         
         self.supabase: Client = create_client(supabase_url, supabase_key)
         
-        # Cargar configuración de fuentes
-        with open('../../shared/config/sources.json', 'r') as f:
+        # Cargar configuración de fuentes usando ruta absoluta
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        sources_path = os.path.join(current_dir, '..', '..', 'shared', 'config', 'sources.json')
+        with open(sources_path, 'r') as f:
             config = json.load(f)
             self.sources = config['sources']
     
