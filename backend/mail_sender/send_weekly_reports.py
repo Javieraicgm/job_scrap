@@ -6,7 +6,9 @@ Envía reportes semanales a usuarios usando Resend
 import os
 from datetime import datetime, timedelta
 from typing import List
-import resend
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
@@ -22,10 +24,12 @@ class EmailSender:
     """Envía emails con reportes de ofertas"""
     
     def __init__(self):
-        # Configurar Resend
-        resend.api_key = os.getenv('RESEND_API_KEY')
-        if not resend.api_key:
-            raise ValueError("RESEND_API_KEY no configurado")
+        # Configurar SMTP (Gmail)
+        self.smtp_email = os.getenv('SMTP_EMAIL')
+        self.smtp_password = os.getenv('SMTP_PASSWORD')
+        
+        if not self.smtp_email or not self.smtp_password:
+            raise ValueError("SMTP_EMAIL y SMTP_PASSWORD deben estar configurados en .env")
         
         # Configurar Supabase
         supabase_url = os.getenv('SUPABASE_URL')
@@ -38,8 +42,8 @@ class EmailSender:
         self.report_gen = ReportGenerator()
         self.matcher = JobMatcher()
         
-        # Email de origen (debe estar verificado en Resend)
-        self.from_email = os.getenv('FROM_EMAIL', 'jobdetector@resend.dev')
+        # Email de origen
+        self.from_email = self.smtp_email
     
     def send_weekly_reports(self):
         """Envía reportes semanales a todos los usuarios activos"""
@@ -198,18 +202,24 @@ class EmailSender:
         )
     
     def _send_email(self, to: str, subject: str, html: str):
-        """Envía un email usando Resend"""
+        """Envía un email usando Gmail SMTP"""
         
-        params = {
-            "from": self.from_email,
-            "to": [to],
-            "subject": subject,
-            "html": html
-        }
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = f"Job Detector <{self.from_email}>"
+        msg['To'] = to
+        
+        # Adjuntar HTML
+        html_part = MIMEText(html, 'html')
+        msg.attach(html_part)
         
         try:
-            email = resend.Emails.send(params)
-            return email
+            # Conectar a Gmail SMTP en puerto 465 (SSL)
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+                server.login(self.smtp_email, self.smtp_password)
+                server.sendmail(self.from_email, to, msg.as_string())
+                
+            return True
         except Exception as e:
             raise Exception(f"Error enviando email: {e}")
 
