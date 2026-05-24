@@ -288,6 +288,7 @@ class ReportGenerator:
         <div class="footer">
             <p>Este reporte fue generado automáticamente por Job Detector</p>
             <p>Recibido: {datetime.now().strftime('%d/%m/%Y')}</p>
+            <p style="margin-top: 15px; font-size: 11px;">¿No quieres recibir más correos? Puedes desuscribirte ingresando a la plataforma > Configuración > Frecuencia de Notificaciones > Desactivado.</p>
         </div>
     </div>
 </body>

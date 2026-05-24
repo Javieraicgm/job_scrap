@@ -184,7 +184,8 @@ class EmailSender:
     </a>
     
     <p style="color: #6b7280; font-size: 12px; margin-top: 40px;">
-        Recibiste este email porque configuraste alertas para matches altos.
+        Recibiste este email porque configuraste alertas para matches altos.<br>
+        ¿No quieres recibir más correos? Puedes desuscribirte ingresando a la plataforma > Configuración > Frecuencia de Notificaciones > Desactivado.
     </p>
 </body>
 </html>
