@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { User, AlertCircle, Bug, Send, Upload, CheckCircle2, Github, Linkedin } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_KEY
+);
 
 const AboutSection = () => {
   const [reportType, setReportType] = useState('bug');
