@@ -73,12 +73,15 @@ class EmailSender:
             try:
                 print(f"\n📤 Procesando: {user['email']}")
                 
-                # Obtener matches del usuario
+                # Filtrar jobs guardados en la última semana
+                last_week_iso = (today - timedelta(days=7)).isoformat()
+                
+                # Obtener matches del usuario (solo los nuevos de esta semana)
                 matches_data = self.supabase.table('job_matches').select(
-                    '*, jobs(*)'
+                    '*, jobs!inner(*)'
                 ).eq('profile_id', user['id']).gte(
                     'match_score', user.get('alert_threshold', 70)
-                ).order('match_score', desc=True).limit(200).execute()
+                ).gte('created_at', last_week_iso).order('match_score', desc=True).limit(200).execute()
                 
                 if not matches_data.data:
                     print(f"   ℹ️  Sin ofertas para este usuario")
@@ -117,6 +120,45 @@ class EmailSender:
         print(f"\n📊 Resumen:")
         print(f"   Enviados: {sent_count}")
         print(f"   Errores: {error_count}")
+        
+    def send_report_for_profile(self, profile_id: str) -> bool:
+        """Envía reporte a un solo usuario (ej. para onboarding o consulta express)"""
+        user_res = self.supabase.table('profiles').select('*').eq('id', profile_id).single().execute()
+        if not user_res.data:
+            return False
+            
+        user = user_res.data
+        today = datetime.now()
+        week_start = (today - timedelta(days=7)).strftime('%d %b %Y')
+        week_end = today.strftime('%d %b %Y')
+        
+        last_week_iso = (today - timedelta(days=7)).isoformat()
+        
+        matches_data = self.supabase.table('job_matches').select(
+            '*, jobs!inner(*)'
+        ).eq('profile_id', user['id']).gte(
+            'match_score', user.get('alert_threshold', 70)
+        ).gte('created_at', last_week_iso).order('match_score', desc=True).limit(200).execute()
+        
+        if not matches_data.data:
+            return False
+            
+        matches = []
+        for match in matches_data.data:
+            matches.append((match['jobs'], match['match_score'], match.get('match_reasons', {})))
+            
+        html = self.report_gen.generate_weekly_report(
+            user_name=user.get('name', 'Usuario'),
+            matches=matches,
+            week_start=week_start,
+            week_end=week_end
+        )
+        
+        return self._send_email(
+            to=user['email'],
+            subject=f"🎯 ¡Tus ofertas express están listas! ({len(matches)} matches)",
+            html=html
+        )
     
     def send_high_match_alert(self, user_email: str, job: dict, score: int):
         """

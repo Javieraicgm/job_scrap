@@ -60,6 +60,10 @@ class MatchCalculator:
                 # Solo guardar si supera threshold mínimo
                 threshold = profile.get('alert_threshold', 60)
                 
+                # Regla especial: LinkedIn requiere 90+ por su alto volumen
+                if job.get('source', '').lower() == 'linkedin':
+                    threshold = max(threshold, 90)
+                
                 if score >= threshold:
                     # Guardar o actualizar match
                     self._upsert_match(
@@ -96,6 +100,10 @@ class MatchCalculator:
             score, reasons = self.matcher.calculate_match(profile.data, job)
             
             threshold = profile.data.get('alert_threshold', 60)
+            
+            # Regla especial: LinkedIn requiere 90+ por su alto volumen
+            if job.get('source', '').lower() == 'linkedin':
+                threshold = max(threshold, 90)
             
             if score >= threshold:
                 self._upsert_match(

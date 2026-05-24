@@ -47,97 +47,107 @@ class ReportGenerator:
         body {{
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #f8fafc;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #0f172a;
         }}
         .container {{
-            background: white;
+            background: #1e293b;
             border-radius: 8px;
             padding: 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }}
         .header {{
-            border-bottom: 3px solid #2563eb;
+            border-bottom: 3px solid #e11d48;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }}
         h1 {{
-            color: #1e40af;
+            color: #f8fafc;
             margin: 0 0 10px 0;
         }}
         .period {{
-            color: #6b7280;
+            color: #94a3b8;
             font-size: 14px;
         }}
         .stats {{
             display: flex;
+            justify-content: space-around;
             gap: 20px;
-            margin: 20px 0;
-            padding: 20px;
-            background: #f0f9ff;
-            border-radius: 6px;
+            margin: 30px 0;
+            padding: 25px;
+            background: #334155;
+            border-radius: 8px;
         }}
         .stat {{
             flex: 1;
             text-align: center;
+            padding: 0 10px;
         }}
         .stat-number {{
             font-size: 32px;
             font-weight: bold;
-            color: #2563eb;
+            color: #fb7185;
         }}
         .stat-label {{
             font-size: 12px;
-            color: #6b7280;
+            color: #cbd5e1;
             text-transform: uppercase;
+            margin-top: 5px;
         }}
         .job-card {{
-            border: 1px solid #e5e7eb;
+            border: 1px solid #334155;
+            background: #0f172a;
             border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
+            padding: 25px;
+            margin: 25px 0;
             transition: all 0.2s;
         }}
         .job-card:hover {{
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border-color: #2563eb;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            border-color: #fb7185;
         }}
         .job-header {{
             display: flex;
             justify-content: space-between;
-            align-items: start;
+            align-items: center;
             margin-bottom: 15px;
         }}
         .job-title {{
             font-size: 20px;
             font-weight: 600;
-            color: #1e40af;
+            color: #f8fafc;
             margin: 0 0 5px 0;
         }}
         .job-company {{
-            color: #6b7280;
+            color: #94a3b8;
             font-size: 14px;
         }}
         .match-badge {{
-            padding: 8px 16px;
+            padding: 4px 12px;
             border-radius: 20px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            height: fit-content;
+            margin-left: 15px;
         }}
         .match-high {{
-            background: #dcfce7;
-            color: #166534;
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
         }}
         .match-medium {{
-            background: #fef3c7;
-            color: #92400e;
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
         }}
         .match-low {{
-            background: #fee2e2;
-            color: #991b1b;
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
         }}
         .job-details {{
             display: flex;
@@ -149,14 +159,14 @@ class ReportGenerator:
             display: flex;
             align-items: center;
             gap: 5px;
-            color: #6b7280;
+            color: #cbd5e1;
         }}
         .detail-icon {{
             width: 16px;
             height: 16px;
         }}
         .match-reasons {{
-            background: #f9fafb;
+            background: #1e293b;
             padding: 15px;
             border-radius: 6px;
             margin: 15px 0;
@@ -164,43 +174,43 @@ class ReportGenerator:
         .reason-item {{
             margin: 5px 0;
             font-size: 14px;
-            color: #4b5563;
+            color: #94a3b8;
         }}
         .apply-button {{
             display: inline-block;
             padding: 12px 24px;
-            background: #2563eb;
-            color: white;
+            background: #e11d48;
+            color: #ffffff;
             text-decoration: none;
             border-radius: 6px;
-            font-weight: 500;
+            font-weight: 600;
             transition: background 0.2s;
         }}
         .apply-button:hover {{
-            background: #1e40af;
+            background: #be123c;
         }}
         .footer {{
             margin-top: 40px;
             padding-top: 20px;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid #334155;
             text-align: center;
-            color: #6b7280;
+            color: #64748b;
             font-size: 12px;
         }}
         .no-jobs {{
             text-align: center;
             padding: 40px;
-            color: #6b7280;
+            color: #94a3b8;
         }}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎯 Ofertas Laborales de la Semana</h1>
+            <h1>Ofertas Laborales de la Semana</h1>
             <p class="period">Período: {week_start} - {week_end}</p>
-            <p>Hola {user_name},</p>
-            <p>Aquí están las mejores ofertas que encontramos para ti esta semana.</p>
+            <p style="color: #ffffff;">Hola {user_name},</p>
+            <p style="color: #ffffff;">Aquí están las mejores ofertas que encontramos para ti esta semana.</p>
         </div>
         
         <div class="stats">
@@ -222,7 +232,7 @@ class ReportGenerator:
         if not matches:
             html += """
         <div class="no-jobs">
-            <h2>😔 No encontramos ofertas esta semana</h2>
+            <h2>No encontramos ofertas esta semana</h2>
             <p>Pero seguimos buscando. Te avisaremos cuando aparezca algo que coincida con tu perfil.</p>
         </div>
 """
@@ -230,7 +240,7 @@ class ReportGenerator:
             # Agregar cada oferta
             for job, score, reasons in matches[:10]:  # Top 10
                 match_class = 'match-high' if score >= 80 else 'match-medium' if score >= 60 else 'match-low'
-                match_label = '🟢 Alta compatibilidad' if score >= 80 else '🟡 Media compatibilidad' if score >= 60 else '🟠 Revisar'
+                match_label = 'Alta compatibilidad' if score >= 80 else 'Media compatibilidad' if score >= 60 else 'Revisar'
                 
                 salary_text = ""
                 if job.get('salary_min') or job.get('salary_max'):
@@ -255,18 +265,18 @@ class ReportGenerator:
             
             <div class="job-details">
                 <div class="detail">
-                    📍 {job.get('location', 'Chile')}
+                    {job.get('location', 'Chile')}
                 </div>
                 <div class="detail">
-                    💼 {job.get('work_mode', 'No especificado').title()}
+                    {job.get('work_mode', 'No especificado').title()}
                 </div>
-                {f'<div class="detail">💰 {salary_text}</div>' if salary_text else ''}
+                {f'<div class="detail">{salary_text}</div>' if salary_text else ''}
             </div>
             
-            {f'<div class="detail">🔧 {skills}</div>' if skills else ''}
+            {f'<div class="detail">Skills: {skills}</div>' if skills else ''}
             
             <div class="match-reasons">
-                <strong>Por qué es un buen match:</strong>
+                <strong style="color: #ffffff;">Por qué es un buen match:</strong>
 """
                 
                 # Agregar razones
@@ -278,7 +288,7 @@ class ReportGenerator:
                 html += f"""
             </div>
             
-            <a href="{job.get('url', '#')}" class="apply-button" target="_blank">
+            <a href="{job.get('url', '#')}" class="apply-button" style="color: #ffffff; background-color: #e11d48;" target="_blank">
                 Ver Oferta →
             </a>
         </div>

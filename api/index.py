@@ -63,6 +63,15 @@ async def calculate_matches(request: CalculateMatchesRequest):
     try:
         calculator = MatchCalculator()
         matches_found = calculator.calculate_for_profile(request.profileId)
+        
+        if matches_found > 0:
+            try:
+                from backend.mail_sender.send_weekly_reports import EmailSender
+                sender = EmailSender()
+                sender.send_report_for_profile(request.profileId)
+            except Exception as e:
+                print(f"Error enviando correo express: {e}")
+                
         return {"success": True, "matches_found": matches_found}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
