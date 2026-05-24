@@ -90,7 +90,8 @@ const AboutSection = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Error enviando el reporte al servidor');
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.detail || `Error HTTP: ${response.status}`);
       }
 
       setSubmitStatus('success');
@@ -102,7 +103,7 @@ const AboutSection = () => {
 
     } catch (error) {
       console.error('Error submitting report:', error);
-      setSubmitStatus('error');
+      setSubmitStatus(`error: ${error.message || JSON.stringify(error)}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -154,7 +155,7 @@ const AboutSection = () => {
             Si encuentras algo extraño, o tienes una idea genial, por favor envíala aquí. Me llegará directamente a mi correo.
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl bg-black/30 p-8 rounded-2xl border border-white/5">
+          <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto bg-black/30 p-8 rounded-2xl border border-white/5">
             
             {/* Tipo de reporte */}
             <div>
@@ -241,10 +242,13 @@ const AboutSection = () => {
               </div>
             )}
             
-            {submitStatus === 'error' && (
+            {submitStatus && submitStatus.startsWith('error') && (
               <div className="flex items-center space-x-2 text-red-400 bg-red-900/20 p-4 rounded-xl border border-red-500/30">
-                <AlertCircle size={20} />
-                <p className="text-sm font-medium">Ocurrió un error al enviar. Por favor intenta de nuevo.</p>
+                <AlertCircle size={20} className="flex-shrink-0" />
+                <p className="text-sm font-medium">
+                  Ocurrió un error al enviar: <br/>
+                  <span className="opacity-75">{submitStatus.replace('error: ', '')}</span>
+                </p>
               </div>
             )}
 
