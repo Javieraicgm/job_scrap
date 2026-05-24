@@ -402,7 +402,7 @@ function UploadTab({ profile, loading, onUpload, onUpdate }) {
         ) : (
           <div className="relative z-10">
             <p className="text-gray-300 mb-10 text-lg leading-relaxed">
-              Nuestro motor de Inteligencia Artificial extraerá automáticamente tus habilidades técnicas, experiencia y roles objetivos para conectarte con el ecosistema de Data Science.
+              Nuestro motor de análisis extraerá automáticamente tus habilidades técnicas, experiencia y perfil profesional para conectarte con las mejores oportunidades del mercado.
             </p>
 
             <div className="border-2 border-dashed border-white/20 rounded-3xl p-16 text-center hover:border-rose-500/50 hover:bg-white/5 transition-all duration-300 group">
