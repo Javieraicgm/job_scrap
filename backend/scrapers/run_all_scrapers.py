@@ -15,6 +15,7 @@ from .empleos_publicos import EmpleosPublicosScraper
 from .getonboard import GetOnBoardScraper
 from .computrabajo import ComputrabajoScraper
 from .trabajando import TrabajandoScraper
+from .codelco import CodelcoScraper
 # Importar otros scrapers cuando estén listos
 # from .linkedin import LinkedInScraper
 
@@ -49,6 +50,7 @@ class ScraperRunner:
             'getonboard': GetOnBoardScraper,
             'computrabajo': ComputrabajoScraper,
             'trabajando': TrabajandoScraper,
+            'codelco': CodelcoScraper,
             # 'linkedin': LinkedInScraper,
         }
         

@@ -45,7 +45,7 @@
       "name": "Mercado Público (Licitaciones)",
       "url": "https://www.mercadopublico.cl",
       "type": "scraper",
-      "active": true,
+      "active": false,
       "categories": ["consulting", "data_analysis"],
       "scraper_file": "mercado_publico.py",
       "description": "Licitaciones públicas que requieren análisis de datos"
