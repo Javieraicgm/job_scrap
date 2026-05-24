@@ -141,9 +141,19 @@ class CVParser:
         """Extrae skills técnicos del texto mediante heurística de secciones y keywords"""
         found_skills = []
         
+        # Pre-procesar texto para arreglar errores comunes de PyPDF2 (tildes separadas y palabras cortadas)
+        text_fixed = text.replace('-\n', '').replace('-\r\n', '') # Unir palabras cortadas
+        replacements = {
+            '´ a': 'á', '´ e': 'é', '´ i': 'í', '´ o': 'ó', '´ u': 'ú',
+            '´ A': 'Á', '´ E': 'É', '´ I': 'Í', '´ O': 'Ó', '´ U': 'Ú',
+            '˜ n': 'ñ', '˜ N': 'Ñ', "´": "", "˜": ""
+        }
+        for k, v in replacements.items():
+            text_fixed = text_fixed.replace(k, v)
+            
         # 1. Extracción Heurística por Secciones
         section_patterns = [r'(?i)\bhabilidades\b', r'(?i)\bskills\b', r'(?i)\baptitudes\b', r'(?i)\bconocimientos\b', r'(?i)\btecnolog[ií]as\b']
-        lines = text.split('\n')
+        lines = text_fixed.split('\n')
         in_skills_section = False
         
         for line in lines:
@@ -169,13 +179,13 @@ class CVParser:
                 
                 # Separar por comas si las hay
                 if ',' in clean_str:
-                    parts = [p.strip() for p in clean_str.split(',')]
+                    parts = [p.strip(' \t.,;') for p in clean_str.split(',')]
                     found_skills.extend([p for p in parts if 2 < len(p) < 40])
                 elif len(clean_str) < 40:  # Si la línea es corta, asumimos que es un skill listado hacia abajo
-                    found_skills.append(clean_str)
+                    found_skills.append(clean_str.strip(' \t.,;'))
 
         # 2. Extracción por Diccionario (Fallback)
-        text_lower = text.lower()
+        text_lower = text_fixed.lower()
         for skill in self.TECH_SKILLS:
             if skill in text_lower:
                 found_skills.append(skill.title())
@@ -184,10 +194,13 @@ class CVParser:
         final_skills = []
         seen = set()
         for s in found_skills:
-            s_clean = s.strip()
-            if s_clean and s_clean.lower() not in seen:
+            s_clean = s.strip(' \t.,;()') # Limpiar parentesis sueltos al final
+            if s_clean.count('(') == 0 and s_clean.endswith(')'):
+                s_clean = s_clean[:-1].strip()
+                
+            if s_clean and s_clean.lower() not in seen and len(s_clean) > 1:
                 seen.add(s_clean.lower())
-                # Si es del diccionario lo formateamos bonito, sino lo dejamos como lo escribió el usuario (titlecase)
+                # Capitalizar primera letra de cada palabra
                 final_skills.append(s_clean.title())
                 
         return final_skills
