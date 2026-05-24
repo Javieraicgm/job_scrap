@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, AlertCircle, Bug, Send, Upload, CheckCircle2, Github, Linkedin } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 
@@ -20,14 +20,20 @@ const AboutSection = () => {
     }
   };
 
-  const handlePaste = (e) => {
-    if (e.clipboardData && e.clipboardData.files && e.clipboardData.files.length > 0) {
-      const pastedFile = e.clipboardData.files[0];
-      if (pastedFile.type.startsWith('image/')) {
-        setFile(pastedFile);
+  useEffect(() => {
+    const handlePaste = (e) => {
+      if (e.clipboardData && e.clipboardData.files && e.clipboardData.files.length > 0) {
+        const pastedFile = e.clipboardData.files[0];
+        if (pastedFile.type.startsWith('image/')) {
+          setFile(pastedFile);
+          e.preventDefault(); // Prevenir que el navegador intente abrir la imagen
+        }
       }
-    }
-  };
+    };
+
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -148,7 +154,7 @@ const AboutSection = () => {
             Si encuentras algo extraño, o tienes una idea genial, por favor envíala aquí. Me llegará directamente a mi correo.
           </p>
 
-          <form onSubmit={handleSubmit} onPaste={handlePaste} className="space-y-6 max-w-2xl bg-black/30 p-8 rounded-2xl border border-white/5">
+          <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl bg-black/30 p-8 rounded-2xl border border-white/5">
             
             {/* Tipo de reporte */}
             <div>
