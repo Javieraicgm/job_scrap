@@ -16,7 +16,7 @@ from .getonboard import GetOnBoardScraper
 from .computrabajo import ComputrabajoScraper
 from .trabajando import TrabajandoScraper
 from .codelco import CodelcoScraper
-# Importar otros scrapers cuando estén listos
+from .linkedin import LinkedInScraper
 # from .linkedin import LinkedInScraper
 
 load_dotenv()
@@ -51,7 +51,7 @@ class ScraperRunner:
             'computrabajo': ComputrabajoScraper,
             'trabajando': TrabajandoScraper,
             'codelco': CodelcoScraper,
-            # 'linkedin': LinkedInScraper,
+            'linkedin': LinkedInScraper,
         }
         
         total_new_jobs = 0
