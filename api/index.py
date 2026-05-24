@@ -6,7 +6,6 @@ import os
 import sys
 from typing import Optional
 from supabase import create_client
-import resend
 
 # Ajustar el path para poder importar los módulos de backend
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -87,6 +86,14 @@ async def scrape_now(request: ScrapeNowRequest):
             calculator = MatchCalculator()
             matches_found = calculator.calculate_for_profile(request.profileId)
             
+            if matches_found > 0:
+                try:
+                    from backend.mail_sender.send_weekly_reports import EmailSender
+                    sender = EmailSender()
+                    sender.send_report_for_profile(request.profileId)
+                except Exception as e:
+                    print(f"Error enviando correo express: {e}")
+            
         return {"success": True, "new_jobs": new_jobs, "matches_updated": matches_found}
     except Exception as e:
         print(f"Error scrape_now: {str(e)}")
@@ -110,9 +117,8 @@ async def report_bug(request: ReportBugRequest):
                 "user_name": request.userName
             }).execute()
 
-        # 2. Enviar email usando Resend
-        if resend.api_key:
-            from_email = os.getenv("FROM_EMAIL", "onboarding@resend.dev")
+        # 2. Enviar email usando EmailSender (SMTP)
+        if os.getenv("SMTP_EMAIL"):
             to_email = os.getenv("ADMIN_EMAIL", "javiera.icgm@gmail.com")
             
             html_content = f"""
@@ -126,12 +132,16 @@ async def report_bug(request: ReportBugRequest):
                 html_content += f'<p><strong>Adjunto:</strong> <a href="{request.imageUrl}">Ver Imagen</a></p>'
                 html_content += f'<img src="{request.imageUrl}" style="max-width: 500px;" />'
 
-            resend.Emails.send({
-                "from": from_email,
-                "to": to_email, # Correo destino
-                "subject": f"[{request.type.upper()}] Feedback de Antigravity",
-                "html": html_content
-            })
+            try:
+                from backend.mail_sender.send_weekly_reports import EmailSender
+                sender = EmailSender()
+                sender._send_email(
+                    to=to_email,
+                    subject=f"[{request.type.upper()}] Feedback de Antigravity",
+                    html=html_content
+                )
+            except Exception as e:
+                print(f"Error enviando reporte de bug: {e}")
             
         return {"success": True}
     except Exception as e:
