@@ -84,7 +84,7 @@ async def report_bug(request: ReportBugRequest):
         # 2. Enviar email usando Resend
         if resend.api_key:
             from_email = os.getenv("FROM_EMAIL", "onboarding@resend.dev")
-            to_email = "javiera.carrasco@example.com" # Asumiendo correo personal (podrías cambiarlo)
+            to_email = os.getenv("ADMIN_EMAIL", "javiera.icgm@gmail.com")
             
             html_content = f"""
             <h2>Nuevo Reporte: {request.type.upper()}</h2>
