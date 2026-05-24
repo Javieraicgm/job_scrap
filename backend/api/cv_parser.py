@@ -138,16 +138,59 @@ class CVParser:
         return None
     
     def _extract_skills(self, text: str) -> List[str]:
-        """Extrae skills técnicos del texto"""
-        text_lower = text.lower()
+        """Extrae skills técnicos del texto mediante heurística de secciones y keywords"""
         found_skills = []
         
+        # 1. Extracción Heurística por Secciones
+        section_patterns = [r'(?i)\bhabilidades\b', r'(?i)\bskills\b', r'(?i)\baptitudes\b', r'(?i)\bconocimientos\b', r'(?i)\btecnolog[ií]as\b']
+        lines = text.split('\n')
+        in_skills_section = False
+        
+        for line in lines:
+            line_clean = line.strip()
+            if not line_clean:
+                continue
+                
+            # Detectar inicio de sección de habilidades
+            if len(line_clean) < 40 and any(re.search(p, line_clean) for p in section_patterns):
+                in_skills_section = True
+                continue
+            
+            # Detectar fin de sección (otro título corto)
+            stop_words = ['experiencia', 'educación', 'education', 'experience', 'perfil', 'resumen', 'idiomas', 'languages']
+            if in_skills_section:
+                if len(line_clean) < 40 and any(sw == line_clean.lower() for sw in stop_words):
+                    in_skills_section = False
+                    continue
+                    
+                # Extraer elementos de la sección
+                # Limpiar viñetas comunes
+                clean_str = re.sub(r'^[-*•>]\s*', '', line_clean)
+                
+                # Separar por comas si las hay
+                if ',' in clean_str:
+                    parts = [p.strip() for p in clean_str.split(',')]
+                    found_skills.extend([p for p in parts if 2 < len(p) < 40])
+                elif len(clean_str) < 40:  # Si la línea es corta, asumimos que es un skill listado hacia abajo
+                    found_skills.append(clean_str)
+
+        # 2. Extracción por Diccionario (Fallback)
+        text_lower = text.lower()
         for skill in self.TECH_SKILLS:
             if skill in text_lower:
-                # Capitalizar apropiadamente
                 found_skills.append(skill.title())
-        
-        return list(set(found_skills))  # Remover duplicados
+                
+        # Limpiar y deduplicar
+        final_skills = []
+        seen = set()
+        for s in found_skills:
+            s_clean = s.strip()
+            if s_clean and s_clean.lower() not in seen:
+                seen.add(s_clean.lower())
+                # Si es del diccionario lo formateamos bonito, sino lo dejamos como lo escribió el usuario (titlecase)
+                final_skills.append(s_clean.title())
+                
+        return final_skills
     
     def _extract_roles(self, text: str) -> List[str]:
         """
