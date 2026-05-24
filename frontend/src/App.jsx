@@ -273,7 +273,7 @@ function UploadTab({ profile, loading, onUpload, onUpdate }) {
           <div className="space-y-6 relative z-10">
             <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-gray-300">
               <p>Tu perfil ha sido extraído y optimizado por nuestro motor de IA.</p>
-              <p className="mt-2 text-rose-300">💡 <strong>Tip para mejores resultados:</strong> Puedes editar esta información haciendo clic en "Editar". Te recomendamos agregar o ajustar manualmente tus habilidades técnicas y roles de interés para que el algoritmo encuentre ofertas más precisas (ej. Geofísica, Herramientas específicas).</p>
+              <p className="mt-2 text-rose-300"><strong>Tip:</strong> Se puede editar la información extraída haciendo clic en "Editar". Te recomendamos agregar o ajustar manualmente tus habilidades técnicas y roles de interés.</p>
             </div>
             
             <div className="bg-black/30 p-8 rounded-2xl border border-white/5">
