@@ -69,11 +69,121 @@
       "categories": ["tech", "startup"],
       "scraper_file": "buk.py",
       "description": "Portal de empleos corporativos"
+    },
+    {
+      "id": "bhp",
+      "name": "BHP Careers Chile",
+      "url": "https://careers.bhp.com/search?location=chile",
+      "type": "scraper",
+      "active": false,
+      "categories": ["mining", "data_science"],
+      "scraper_file": "bhp.py",
+      "description": "Ofertas laborales en minería (BHP)"
+    },
+    {
+      "id": "contutalento",
+      "name": "Con Tu Talento",
+      "url": "https://contutalento.cl/laboral/",
+      "type": "scraper",
+      "active": false,
+      "categories": ["general", "consulting"],
+      "scraper_file": "contutalento.py",
+      "description": "Consultora de reclutamiento"
+    },
+    {
+      "id": "laborum",
+      "name": "Laborum Chile",
+      "url": "https://www.laborum.cl/",
+      "type": "scraper",
+      "active": false,
+      "categories": ["general", "data_science"],
+      "scraper_file": "laborum.py",
+      "description": "Portal general de empleos"
+    },
+    {
+      "id": "mop_doh",
+      "name": "MOP - DOH",
+      "url": "https://www.mop.gob.cl/concursos-doh/",
+      "type": "scraper",
+      "active": false,
+      "categories": ["public_sector", "engineering"],
+      "scraper_file": "mop_doh.py",
+      "description": "Concursos de la Dirección de Obras Hidráulicas"
+    },
+    {
+      "id": "temuco",
+      "name": "Municipalidad de Temuco",
+      "url": "https://www.temuco.cl/postulaciones-a-cargos-publicos/",
+      "type": "scraper",
+      "active": false,
+      "categories": ["public_sector"],
+      "scraper_file": "temuco.py",
+      "description": "Cargos públicos en Temuco"
+    },
+    {
+      "id": "chiletrabajos",
+      "name": "Chiletrabajos",
+      "url": "https://www.chiletrabajos.cl/",
+      "type": "scraper",
+      "active": false,
+      "categories": ["general"],
+      "scraper_file": "chiletrabajos.py",
+      "description": "Portal general de empleos"
+    },
+    {
+      "id": "dt",
+      "name": "Dirección del Trabajo",
+      "url": "https://www.dt.cl/",
+      "type": "scraper",
+      "active": false,
+      "categories": ["public_sector"],
+      "scraper_file": "dt.py",
+      "description": "Portal de la Dirección del Trabajo"
+    },
+    {
+      "id": "buscojobs",
+      "name": "Buscojobs",
+      "url": "https://www.buscojobs.cl/",
+      "type": "scraper",
+      "active": false,
+      "categories": ["general"],
+      "scraper_file": "buscojobs.py",
+      "description": "Portal general de empleos"
+    },
+    {
+      "id": "bne",
+      "name": "Bolsa Nacional de Empleo",
+      "url": "https://www.bne.gob.cl/",
+      "type": "scraper",
+      "active": false,
+      "categories": ["general", "public_sector"],
+      "scraper_file": "bne.py",
+      "description": "Bolsa Nacional de Empleo de Chile"
+    },
+    {
+      "id": "firstjob",
+      "name": "FirstJob",
+      "url": "https://firstjob.me/",
+      "type": "scraper",
+      "active": false,
+      "categories": ["junior", "trainee", "startup"],
+      "scraper_file": "firstjob.py",
+      "description": "Ofertas para perfiles junior y prácticas"
+    },
+    {
+      "id": "computrabajo",
+      "name": "Computrabajo Chile",
+      "url": "https://cl.computrabajo.com/",
+      "type": "scraper",
+      "active": false,
+      "categories": ["general"],
+      "scraper_file": "computrabajo.py",
+      "description": "Portal general de empleos"
     }
   ],
   "metadata": {
-    "last_updated": "2025-05-21",
-    "total_sources": 7,
+    "last_updated": "2026-05-23",
+    "total_sources": 18,
     "active_sources": 6
   }
 }
