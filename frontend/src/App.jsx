@@ -569,7 +569,7 @@ function JobsTab({ jobs, profile, onRefresh }) {
           {scrapeResult && scrapeResult.success && (
             <span className="text-xs text-green-400 mt-2 flex items-center">
               <CheckCircle2 size={12} className="mr-1" />
-              +{scrapeResult.newJobs} nuevas
+              +{scrapeResult.newJobs} escaneadas, {scrapeResult.matchesUpdated} compatibles
             </span>
           )}
           {scrapeResult && !scrapeResult.success && (
