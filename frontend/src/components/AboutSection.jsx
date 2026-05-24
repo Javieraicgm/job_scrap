@@ -20,6 +20,15 @@ const AboutSection = () => {
     }
   };
 
+  const handlePaste = (e) => {
+    if (e.clipboardData && e.clipboardData.files && e.clipboardData.files.length > 0) {
+      const pastedFile = e.clipboardData.files[0];
+      if (pastedFile.type.startsWith('image/')) {
+        setFile(pastedFile);
+      }
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!description.trim()) return;
@@ -139,7 +148,7 @@ const AboutSection = () => {
             Si encuentras algo extraño, o tienes una idea genial, por favor envíala aquí. Me llegará directamente a mi correo.
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl bg-black/30 p-8 rounded-2xl border border-white/5">
+          <form onSubmit={handleSubmit} onPaste={handlePaste} className="space-y-6 max-w-2xl bg-black/30 p-8 rounded-2xl border border-white/5">
             
             {/* Tipo de reporte */}
             <div>
@@ -193,7 +202,7 @@ const AboutSection = () => {
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <Upload className="w-8 h-8 mb-3 text-gray-500" />
                     <p className="mb-2 text-sm text-gray-400">
-                      {file ? <span className="text-rose-400 font-semibold">{file.name}</span> : <span><span className="font-semibold">Haz clic para subir</span> o arrastra una imagen</span>}
+                      {file ? <span className="text-rose-400 font-semibold">{file.name}</span> : <span><span className="font-semibold">Haz clic para subir</span>, arrastra, o presiona Ctrl+V para pegar</span>}
                     </p>
                     <p className="text-xs text-gray-500">PNG, JPG o WEBP (MAX. 5MB)</p>
                   </div>
