@@ -37,7 +37,8 @@ function App() {
 
     try {
       // Subir CV a Supabase Storage
-      const fileName = `${Date.now()}_${file.name}`;
+      const cleanFileName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '');
+      const fileName = `${Date.now()}_${cleanFileName}`;
       const { data: uploadData, error: uploadError } = await supabase
         .storage
         .from('cvs')
