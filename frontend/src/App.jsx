@@ -62,10 +62,10 @@ function App() {
       // Guardar perfil en DB
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .insert([{
+        .upsert([{
           ...parsedProfile,
           cv_file_url: urlData.publicUrl
-        }])
+        }], { onConflict: 'email' })
         .select()
         .single();
 
