@@ -107,11 +107,9 @@ const AboutSection = () => {
           </div>
           <div>
             <h2 className="text-3xl font-bold text-white mb-2">Google Antigravity</h2>
-            <p className="text-gray-300 mb-4 text-lg">Desarrollado y mantenido por <strong className="text-rose-400">Javiera Carrasco</strong></p>
-            <p className="text-gray-400 max-w-2xl text-sm leading-relaxed mb-6">
-              Esta aplicación es un buscador impulsado por Inteligencia Artificial diseñado para facilitar la búsqueda 
-              de empleos en Data Science, Geofísica y áreas STEM en Chile. Actualmente se encuentra en versión <strong className="text-white">Beta</strong>.
-              El sistema recorre diversos portales de internet y utiliza algoritmos para hacer match con tu currículum.
+            <p className="text-gray-400 mb-4 text-sm">Desarrollado y mantenido por <strong className="text-rose-400">Javiera Carrasco Gamboa</strong></p>
+            <p className="text-gray-300 max-w-2xl text-base leading-relaxed mb-6">
+              Esta aplicación es un buscador impulsado por Inteligencia Artificial diseñado para facilitar la búsqueda de empleos en áreas STEM en Chile. Actualmente se encuentra en versión <strong className="text-white">Beta</strong>.
             </p>
             <div className="flex gap-4">
               <a 
