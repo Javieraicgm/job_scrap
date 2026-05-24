@@ -14,8 +14,9 @@ from dotenv import load_dotenv
 
 from .report_generator import ReportGenerator
 import sys
-sys.path.append('..')
-from matcher.job_matcher import JobMatcher
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+from backend.matcher.job_matcher import JobMatcher
 
 load_dotenv()
 
@@ -25,15 +26,15 @@ class EmailSender:
     
     def __init__(self):
         # Configurar SMTP (Gmail)
-        self.smtp_email = os.getenv('SMTP_EMAIL')
+        self.smtp_email = os.getenv('SMTP_USER') or os.getenv('SMTP_EMAIL')
         self.smtp_password = os.getenv('SMTP_PASSWORD')
         
         if not self.smtp_email or not self.smtp_password:
-            raise ValueError("SMTP_EMAIL y SMTP_PASSWORD deben estar configurados en .env")
+            raise ValueError("SMTP_USER/SMTP_EMAIL y SMTP_PASSWORD deben estar configurados en .env")
         
         # Configurar Supabase
         supabase_url = os.getenv('SUPABASE_URL')
-        supabase_key = os.getenv('SUPABASE_KEY')
+        supabase_key = os.getenv('SUPABASE_SERVICE_ROLE_KEY', os.getenv('SUPABASE_KEY'))
         
         if not supabase_url or not supabase_key:
             raise ValueError("SUPABASE_URL y SUPABASE_KEY deben estar configurados")
