@@ -25,6 +25,7 @@ jobs:
         run: |
           cd backend
           pip install -r requirements.txt
+          playwright install chromium
       
       - name: Load sources configuration
         run: |

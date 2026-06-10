@@ -55,7 +55,7 @@
       "name": "Codelco Carreras",
       "url": "https://www.codelco.com/trabaja-con-nosotros",
       "type": "scraper",
-      "active": true,
+      "active": false,
       "categories": ["mining", "data_science"],
       "scraper_file": "codelco.py",
       "description": "Ofertas laborales en Codelco"
@@ -75,7 +75,7 @@
       "name": "BHP Careers Chile",
       "url": "https://careers.bhp.com/search?location=chile",
       "type": "scraper",
-      "active": true,
+      "active": false,
       "categories": ["mining", "data_science"],
       "scraper_file": "bhp.py",
       "description": "Ofertas laborales en minería (BHP)"
@@ -179,6 +179,16 @@
       "categories": ["general"],
       "scraper_file": "computrabajo.py",
       "description": "Portal general de empleos"
+    },
+    {
+      "id": "anglo_american",
+      "name": "Anglo American Chile",
+      "url": "https://www.angloamerican.com/careers/job-opportunities",
+      "type": "scraper",
+      "active": true,
+      "categories": ["mining", "data_science", "engineering"],
+      "scraper_file": "angloamerican.py",
+      "description": "Ofertas laborales en Anglo American"
     }
   ],
   "metadata": {

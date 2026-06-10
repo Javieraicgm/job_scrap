@@ -12,11 +12,12 @@ class AMineralsScraper(BaseScraper):
         super().__init__(
             source_id='aminerals',
             source_name='Antofagasta Minerals',
-            base_url='https://empleos.aminerals.cl'
+            base_url='https://performancemanager8.successfactors.com'
         )
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
         })
+        self.company_id = 'AMSAP'
         
     def scrape(self, keywords: List[str] = None) -> List[Dict]:
         if not keywords:
@@ -28,7 +29,7 @@ class AMineralsScraper(BaseScraper):
             print(f"   Buscando '{keyword}' en AMSA...")
             try:
                 kw_formatted = keyword.replace(' ', '+')
-                url = f"{self.base_url}/search/?q={kw_formatted}"
+                url = f"{self.base_url}/career?company={self.company_id}&career_ns=job_listing_summary&navBarLevel=JOB_SEARCH&_s.crb=1&keyword={kw_formatted}"
                 
                 soup = self.fetch_page(url)
                 
@@ -40,14 +41,17 @@ class AMineralsScraper(BaseScraper):
                 articles = soup.find_all('tr', class_=re.compile(r'data-row|job-result', re.IGNORECASE))
                 
                 if not articles:
-                    # Alternativa: buscar enlaces que contengan /job/
+                    # Alternativa: buscar enlaces que contengan /career?career_ns=job_listing
                     articles = []
-                    links = soup.find_all('a', href=re.compile(r'/job/'))
-                    # Deduplicar links
+                    links = soup.find_all('a', class_='jobTitle')
+                    if not links:
+                        links = soup.find_all('a', href=re.compile(r'career_ns=job_listing'))
+                        
                     seen = set()
                     for link in links:
-                        if link['href'] not in seen:
-                            seen.add(link['href'])
+                        href = link.get('href', '')
+                        if href not in seen:
+                            seen.add(href)
                             articles.append(link.parent.parent) # subir al contenedor
                 
                 print(f"   Encontradas {len(articles)} ofertas de '{keyword}' en la primera página.")
@@ -68,21 +72,26 @@ class AMineralsScraper(BaseScraper):
     def _parse_article(self, article) -> Dict:
         try:
             # 1. Enlace y Título
-            link_elem = article.find('a', href=re.compile(r'/job/'))
-            if not link_elem:
+            title_elem = article.find('a', class_='jobTitle') or article.find('a', href=re.compile(r'career_ns=job_listing'))
+            if not title_elem:
                 return None
                 
-            title = link_elem.get_text(strip=True)
-            link_path = link_elem.get('href', '')
-            job_url = self.base_url + link_path if link_path.startswith('/') else link_path
+            title = title_elem.get_text(strip=True)
+            link_path = title_elem.get('href', '')
+            if not link_path.startswith('http'):
+                if not link_path.startswith('/'):
+                    link_path = '/' + link_path
+                job_url = self.base_url + link_path
+            else:
+                job_url = link_path
             
             # Extraer ID
-            external_id_match = re.search(r'/job/[^/]+/(\d+)', job_url)
-            external_id = external_id_match.group(1) if external_id_match else job_url.split('/')[-2]
+            external_id_match = re.search(r'career_job_req_id=(\d+)', job_url)
+            external_id = external_id_match.group(1) if external_id_match else "amsa_" + str(hash(title))[:6]
             
             # 2. Empresa y Ubicación (en SuccessFactors suele estar en spans con clases específicas)
             location = "Chile"
-            location_elem = article.find('span', class_=re.compile(r'jobLocation', re.IGNORECASE))
+            location_elem = article.find('span', class_=re.compile(r'jobLocation', re.IGNORECASE)) or article.find('div', class_='location')
             if location_elem:
                 location = location_elem.get_text(strip=True)
             
@@ -106,15 +115,7 @@ class AMineralsScraper(BaseScraper):
                 'deadline_date': None
             }
             
-            # Fetch para obtener descripción real
-            try:
-                job_soup = self.fetch_page(job_url)
-                if job_soup:
-                    desc_span = job_soup.find('span', class_=re.compile(r'jobdescription', re.IGNORECASE))
-                    if desc_span:
-                        raw_data['description'] = desc_span.get_text(separator='\n', strip=True)
-            except Exception as e:
-                print(f"   Error fetching description for {job_url}: {e}")
+            # No hacemos fetch_page detallado para no demorar
             
             return self.normalize_job(raw_data)
             

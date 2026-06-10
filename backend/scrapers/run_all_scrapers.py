@@ -16,9 +16,8 @@ from .empleos_publicos import EmpleosPublicosScraper
 from .getonboard import GetOnBoardScraper
 from .computrabajo import ComputrabajoScraper
 from .trabajando import TrabajandoScraper
-from .codelco import CodelcoScraper
 from .linkedin import LinkedInScraper
-from .bhp import BhpScraper
+from .angloamerican import AngloAmericanScraper
 
 load_dotenv()
 
@@ -51,9 +50,8 @@ class ScraperRunner:
             'getonboard': GetOnBoardScraper,
             'computrabajo': ComputrabajoScraper,
             'trabajando': TrabajandoScraper,
-            'codelco': CodelcoScraper,
             'linkedin': LinkedInScraper,
-            'bhp': BhpScraper,
+            'anglo_american': AngloAmericanScraper,
         }
         
         total_new_jobs = 0

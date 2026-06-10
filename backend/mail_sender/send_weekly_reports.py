@@ -81,7 +81,7 @@ class EmailSender:
                 matches_data = self.supabase.table('job_matches').select(
                     '*, jobs!inner(*)'
                 ).eq('profile_id', user['id']).gte(
-                    'match_score', user.get('alert_threshold', 70)
+                    'match_score', user.get('alert_threshold', 60)
                 ).gte('created_at', last_week_iso).order('match_score', desc=True).limit(200).execute()
                 
                 if not matches_data.data:
@@ -138,8 +138,8 @@ class EmailSender:
         matches_data = self.supabase.table('job_matches').select(
             '*, jobs!inner(*)'
         ).eq('profile_id', user['id']).gte(
-            'match_score', user.get('alert_threshold', 70)
-        ).gte('created_at', last_week_iso).order('match_score', desc=True).limit(200).execute()
+            'match_score', user.get('alert_threshold', 60)
+        ).order('match_score', desc=True).limit(200).execute()
         
         if not matches_data.data:
             return False
