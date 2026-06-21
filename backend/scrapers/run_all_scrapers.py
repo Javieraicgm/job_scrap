@@ -18,6 +18,9 @@ from .computrabajo import ComputrabajoScraper
 from .trabajando import TrabajandoScraper
 from .linkedin import LinkedInScraper
 from .angloamerican import AngloAmericanScraper
+from .bne import BNEScraper
+from .laborum import LaborumScraper
+from .chiletrabajos import ChileTrabajosScraper
 
 load_dotenv()
 
@@ -52,6 +55,9 @@ class ScraperRunner:
             'trabajando': TrabajandoScraper,
             'linkedin': LinkedInScraper,
             'anglo_american': AngloAmericanScraper,
+            'bne': BNEScraper,
+            'laborum': LaborumScraper,
+            'chiletrabajos': ChileTrabajosScraper,
         }
         
         total_new_jobs = 0

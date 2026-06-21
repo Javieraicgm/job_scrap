@@ -95,7 +95,7 @@
       "name": "Laborum Chile",
       "url": "https://www.laborum.cl/",
       "type": "scraper",
-      "active": false,
+      "active": true,
       "categories": ["general", "data_science"],
       "scraper_file": "laborum.py",
       "description": "Portal general de empleos"
@@ -125,7 +125,7 @@
       "name": "Chiletrabajos",
       "url": "https://www.chiletrabajos.cl/",
       "type": "scraper",
-      "active": false,
+      "active": true,
       "categories": ["general"],
       "scraper_file": "chiletrabajos.py",
       "description": "Portal general de empleos"
@@ -155,7 +155,7 @@
       "name": "Bolsa Nacional de Empleo",
       "url": "https://www.bne.gob.cl/",
       "type": "scraper",
-      "active": false,
+      "active": true,
       "categories": ["general", "public_sector"],
       "scraper_file": "bne.py",
       "description": "Bolsa Nacional de Empleo de Chile"

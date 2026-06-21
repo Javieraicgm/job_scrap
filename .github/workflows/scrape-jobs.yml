@@ -58,8 +58,8 @@ jobs:
           cd backend
           python -m matcher.calculate_all_matches
       
-      - name: Send notifications (if Monday 8 AM Chile time)
-        if: github.event.schedule == '0 11 * * 1'
+      - name: Send notifications (if Monday 8 AM Chile time or manual)
+        if: github.event.schedule == '0 11 * * 1' || github.event_name == 'workflow_dispatch'
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
