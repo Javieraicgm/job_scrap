@@ -27,29 +27,29 @@ class MatchCalculator:
     def calculate_all_matches(self):
         """Calcula matches para todos los perfiles contra todas las ofertas activas"""
         
-        print("🔄 Calculando matches...")
+        print("Calculando matches...")
         
         # Obtener todos los perfiles
         profiles = self.supabase.table('profiles').select('*').execute()
         
         if not profiles.data:
-            print("ℹ️  No hay perfiles registrados")
+            print("No hay perfiles registrados")
             return
         
         # Obtener todas las ofertas activas
         jobs = self.supabase.table('jobs').select('*').eq('is_active', True).execute()
         
         if not jobs.data:
-            print("ℹ️  No hay ofertas activas")
+            print("No hay ofertas activas")
             return
         
-        print(f"👥 {len(profiles.data)} perfiles")
-        print(f"💼 {len(jobs.data)} ofertas activas")
+        print(f"{len(profiles.data)} perfiles")
+        print(f"{len(jobs.data)} ofertas activas")
         
         total_matches = 0
         
         for profile in profiles.data:
-            print(f"\n📊 Procesando perfil: {profile.get('email', profile['id'])}")
+            print(f"\nProcesando perfil: {profile.get('email', profile['id'])}")
             
             matches_for_profile = 0
             
@@ -74,10 +74,10 @@ class MatchCalculator:
                     )
                     matches_for_profile += 1
             
-            print(f"   ✅ {matches_for_profile} matches encontrados")
+            print(f"   {matches_for_profile} matches encontrados")
             total_matches += matches_for_profile
         
-        print(f"\n🎉 Total matches calculados: {total_matches}")
+        print(f"\nTotal matches calculados: {total_matches}")
         return total_matches
     
     def calculate_for_profile(self, profile_id: str):
@@ -139,7 +139,7 @@ class MatchCalculator:
 
 if __name__ == '__main__':
     print("=" * 60)
-    print("🔄 Job Detector - Match Calculator")
+    print("Job Detector - Match Calculator")
     print("=" * 60)
     
     calculator = MatchCalculator()

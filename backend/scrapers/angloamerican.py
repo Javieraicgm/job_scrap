@@ -12,7 +12,11 @@ class AngloAmericanScraper(BaseScraper):
     """Scraper para ofertas laborales de Anglo American usando la API de SmartRecruiters"""
     
     def __init__(self):
-        super().__init__("anglo_american")
+        super().__init__(
+            source_id="anglo_american",
+            source_name="Anglo American",
+            base_url="https://api.smartrecruiters.com/v1/companies/AngloAmericanDeBeersGroup/postings"
+        )
         self.api_url = "https://api.smartrecruiters.com/v1/companies/AngloAmericanDeBeersGroup/postings"
         
     def _extract_jobs(self) -> List[Dict[str, Any]]:

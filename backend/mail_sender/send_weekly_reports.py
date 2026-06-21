@@ -57,10 +57,10 @@ class EmailSender:
         ).execute()
         
         if not users.data:
-            print("ℹ️  No hay usuarios con reportes semanales configurados")
+            print("No hay usuarios con reportes semanales configurados")
             return
         
-        print(f"👥 Encontrados {len(users.data)} usuarios")
+        print(f"[INFO] Encontrados {len(users.data)} perfiles con alertas activas.")
         
         # Calcular período (última semana)
         today = datetime.now()
@@ -72,7 +72,7 @@ class EmailSender:
         
         for user in users.data:
             try:
-                print(f"\n📤 Procesando: {user['email']}")
+                print(f"\nProcesando: {user['email']}")
                 
                 # Filtrar jobs guardados en la última semana
                 last_week_iso = (today - timedelta(days=7)).isoformat()
@@ -85,7 +85,7 @@ class EmailSender:
                 ).gte('created_at', last_week_iso).order('match_score', desc=True).limit(200).execute()
                 
                 if not matches_data.data:
-                    print(f"   ℹ️  Sin ofertas para este usuario")
+                    print(f"   Sin ofertas para este usuario")
                     continue
                 
                 # Formatear matches
@@ -107,19 +107,19 @@ class EmailSender:
                 # Enviar email
                 self._send_email(
                     to=user['email'],
-                    subject=f"🎯 {len(matches)} ofertas laborales para ti",
+                    subject=f"{len(matches)} ofertas laborales para ti",
                     html=html
                 )
                 
                 sent_count += 1
-                print(f"   ✅ Email enviado ({len(matches)} ofertas)")
+                print(f"   Email enviado ({len(matches)} ofertas)")
                 
             except Exception as e:
                 error_count += 1
-                print(f"   ❌ Error: {e}")
+                print(f"   Error: {e}")
         
-        print(f"\n📊 Resumen:")
-        print(f"   Enviados: {sent_count}")
+        print(f"\nResumen:")
+        print(f"\n[INFO] Enviando reportes...: {sent_count}")
         print(f"   Errores: {error_count}")
         
     def send_report_for_profile(self, profile_id: str) -> bool:
@@ -269,7 +269,7 @@ class EmailSender:
 
 if __name__ == '__main__':
     print("=" * 60)
-    print("📧 Job Detector - Email Sender")
+    print("Job Detector - Email Sender")
     print("=" * 60)
     
     sender = EmailSender()

@@ -37,7 +37,7 @@ class ScraperRunner:
         # Cargar configuración de fuentes usando ruta absoluta
         current_dir = os.path.dirname(os.path.abspath(__file__))
         sources_path = os.path.join(current_dir, '..', '..', 'shared', 'config', 'sources.json')
-        with open(sources_path, 'r') as f:
+        with open(sources_path, 'r', encoding='utf-8') as f:
             config = json.load(f)
             self.sources = config['sources']
     
@@ -60,7 +60,7 @@ class ScraperRunner:
         
         def run_single_scraper(source):
             source_id = source['id']
-            print(f"\n🔍 Ejecutando scraper: {source['name']}")
+            print(f"\n[INFO] Ejecutando scraper: {source['name']}")
             run_id = None
             try:
                 run_id = self._log_scraper_start(source_id)
@@ -75,14 +75,14 @@ class ScraperRunner:
                 print(f"   Encontradas {len(jobs)} ofertas en {source['name']}")
                 
                 new_jobs = self._save_jobs(jobs)
-                print(f"   ✅ {new_jobs} ofertas nuevas guardadas en {source['name']}")
+                print(f"   [OK] {new_jobs} ofertas nuevas guardadas en {source['name']}")
                 
                 if run_id:
                     self._log_scraper_success(run_id, len(jobs), new_jobs)
                 return new_jobs
                 
             except Exception as e:
-                print(f"   ❌ Error en {source['name']}: {e}")
+                print(f"   [ERROR] Error en {source['name']}: {e}")
                 if run_id:
                     self._log_scraper_error(run_id, str(e))
                 return 0
@@ -92,7 +92,7 @@ class ScraperRunner:
             results = executor.map(run_single_scraper, active_sources)
             total_new_jobs = sum(results)
         
-        print(f"\n🎉 Total ofertas nuevas: {total_new_jobs}")
+        print(f"\n[END] Total ofertas nuevas: {total_new_jobs}")
         return total_new_jobs
     
     def _save_jobs(self, jobs: List[Dict]) -> int:
@@ -148,7 +148,7 @@ class ScraperRunner:
 
 if __name__ == '__main__':
     print("=" * 60)
-    print("🤖 Job Detector - Scraper Runner")
+    print("Job Detector - Scraper Runner")
     print("=" * 60)
     
     runner = ScraperRunner()
