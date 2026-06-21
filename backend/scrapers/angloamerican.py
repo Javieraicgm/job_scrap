@@ -57,7 +57,7 @@ class AngloAmericanScraper(BaseScraper):
                     
                     # Generar ID único
                     job_id = posting.get("id", "")
-                    unique_id = self.generate_id(f"{job_id}_{posting.get('name', '')}")
+                    unique_id = f"anglo_{job_id}"
                     
                     # Construir URL de postulación
                     # La url que da el endpoint es api (ref), la url real es la página de SmartRecruiters
