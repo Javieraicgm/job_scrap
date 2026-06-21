@@ -38,7 +38,16 @@ jobs:
           PYTHONIOENCODING: utf8
         run: |
           cd backend
-          python -m scrapers.run_all_scrapers
+          python -m scrapers.run_all_scrapers > scraper_output.log 2>&1 || true
+          cat scraper_output.log
+          if grep -q "Traceback" scraper_output.log; then echo "Failed" && exit 1; fi
+
+      - name: Upload Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scraper-logs
+          path: backend/scraper_output.log
       
       - name: Calculate matches
         env:
