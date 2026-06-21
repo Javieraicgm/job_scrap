@@ -19,7 +19,7 @@ class AngloAmericanScraper(BaseScraper):
         )
         self.api_url = "https://api.smartrecruiters.com/v1/companies/AngloAmericanDeBeersGroup/postings"
         
-    def _extract_jobs(self) -> List[Dict[str, Any]]:
+    def scrape(self, keywords: List[str] = None) -> List[Dict[str, Any]]:
         """Extrae trabajos llamando a la API JSON pública de SmartRecruiters"""
         jobs = []
         try:
